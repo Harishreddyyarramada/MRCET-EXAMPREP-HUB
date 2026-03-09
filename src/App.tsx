@@ -9,6 +9,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { lazy, Suspense } from "react";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { isSupabaseConfigured, missingSupabaseEnvVars } from "@/integrations/supabase/client";
+import AuthCallback from "./pages/AuthCallback";
 
 // Lazy load pages for code splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -60,6 +61,7 @@ const App = () => (
                 <Route path="/papers" element={<Papers />} />
                 <Route path="/upload" element={<Upload />} />
                 <Route path="/ai-search" element={<AISearch />} />
+                <Route path="/auth/callback" element={<AuthCallback />} />
                 <Route path="/dashboard" element={
                   <ProtectedRoute>
                     <Dashboard />

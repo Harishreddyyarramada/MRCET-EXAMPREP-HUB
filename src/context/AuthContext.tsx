@@ -124,23 +124,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const signUp = async (email: string, password: string, metadata: Record<string, string>) => {
-    if (!isSupabaseConfigured) return { error: supabaseConfigError(), needsEmailVerification: false };
+  if (!isSupabaseConfigured) return { error: supabaseConfigError(), needsEmailVerification: false };
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: metadata,
-        emailRedirectTo: `${window.location.origin}/dashboard`,
-      },
-    });
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: metadata,
+      emailRedirectTo: `${window.location.origin}/auth/callback`,
+    },
+  });
 
-    return {
-      error: error as Error | null,
-      needsEmailVerification: !data.session,
-    };
+  return {
+    error: error as Error | null,
+    needsEmailVerification: !data.session,
   };
-
+};
   const signIn = async (email: string, password: string) => {
     if (!isSupabaseConfigured) return { error: supabaseConfigError() };
 

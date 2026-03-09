@@ -118,8 +118,8 @@ const Upload = () => {
               <UploadIcon className="h-8 w-8 text-primary" />
             </div>
             <p className="text-foreground font-display font-bold text-lg mb-1">Drop files here or click to browse</p>
-            <p className="text-xs text-muted-foreground mb-5">PDF, Images, ZIP • Max 20MB per file</p>
-            <input type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.zip" className="hidden" id="file-input"
+            <p className="text-xs text-muted-foreground mb-5">PDF, Images• Max 20MB per file</p>
+            <input type="file" multiple accept=".pdf,.jpg,.jpeg,.png" className="hidden" id="file-input"
               onChange={(e) => e.target.files && setFiles([...files, ...Array.from(e.target.files)])} />
             <label htmlFor="file-input">
               <Button variant="outline" className="border-primary/20 text-primary cursor-pointer rounded-xl font-semibold hover:bg-primary/5" asChild>
