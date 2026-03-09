@@ -7,11 +7,9 @@ const AuthCallback = () => {
 
   useEffect(() => {
     const handleAuth = async () => {
-      const { error } = await supabase.auth.exchangeCodeForSession(
-        window.location.href
-      );
+      const { data } = await supabase.auth.getSession();
 
-      if (!error) {
+      if (data.session) {
         navigate("/dashboard");
       } else {
         navigate("/login");
