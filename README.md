@@ -1,87 +1,170 @@
-# Welcome to your Lovable project
+# MRCET ExamPrep Hub
 
-## Project info
+Production-ready exam preparation platform for students, faculty, and administrators.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
-## How can I edit this code?
+## Overview
 
-There are several ways of editing your application.
+MRCET ExamPrep Hub is a full-stack web application that helps students prepare for exams using verified previous-year papers, analytics, and AI-assisted search. The platform includes strict role-based access for students, faculty, and admins, with secure authentication and moderated content workflows.
 
-**Use Lovable**
+## Core Capabilities
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- Student signup with email verification and auto-login on verification
+- Student profile management (name, roll number, branch, year)
+- Role-based dashboards for Student, Faculty, and Admin
+- Faculty paper review and moderation pipeline
+- Approved paper discovery, filtering, and downloads
+- Bookmarking and user notifications
+- AI search interface for question-paper exploration
+- Responsive UI with reusable component system
 
-Changes made via Lovable will be committed automatically to this repo.
+## Tech Stack
 
-**Use your preferred IDE**
+- Frontend: React 18, TypeScript, Vite
+- UI: Tailwind CSS, shadcn/ui, Radix UI, Framer Motion
+- Routing: React Router v6
+- State/Data: TanStack React Query
+- Backend: Supabase (Auth, Postgres, Storage, RLS)
+- Testing: Vitest + Testing Library
+- Linting: ESLint
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Project Structure
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+```text
+src/
+  components/          Reusable UI and feature components
+  context/             Auth context and session handling
+  hooks/               Shared React hooks
+  integrations/        Supabase client and generated types
+  pages/               Route-level pages
+supabase/
+  migrations/          Database schema and updates
+  functions/           Edge functions (admin/faculty automation)
+```
 
-Follow these steps:
+## Roles and Access Model
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- Student:
+  - Sign up, verify email, access approved papers, bookmark, manage profile
+- Faculty:
+  - Sign in to faculty dashboard, review and manage paper submissions
+- Admin:
+  - Manage users, roles, faculty accounts, and platform operations
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Authorization is enforced through Supabase RLS policies and role checks in app routes.
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Authentication and Verification Flow
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+1. Student completes signup form.
+2. Verification email is sent.
+3. Student clicks verification link.
+4. User is auto-authenticated in the app.
+5. Profile fields from signup metadata are available in profile/dashboard/navbar.
+
+## Local Development
+
+### 1. Prerequisites
+
+- Node.js 18+
+- npm 9+
+- Supabase project (URL + anon publishable key)
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure environment
+
+Create `.env` from `.env.example`:
+
+```bash
+VITE_SUPABASE_PROJECT_ID="your-project-id"
+VITE_SUPABASE_URL="https://your-project-id.supabase.co"
+VITE_SUPABASE_PUBLISHABLE_KEY="your-anon-publishable-key"
+```
+
+### 4. Apply database migrations
+
+If you are using Supabase CLI:
+
+```bash
+supabase db push
+```
+
+### 5. Start development server
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+App default URL: `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Available Scripts
 
-**Use GitHub Codespaces**
+- `npm run dev` - Start Vite dev server
+- `npm run build` - Build production bundle
+- `npm run preview` - Preview production build locally
+- `npm run lint` - Run ESLint checks
+- `npm run test` - Run unit tests once
+- `npm run test:watch` - Run tests in watch mode
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Production Build and Deployment
 
-## What technologies are used for this project?
+### Build
 
-This project is built with:
+```bash
+npm run build
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Deploy
 
-## How can I deploy this project?
+Deploy the `dist/` output to any static hosting provider (Vercel, Netlify, Cloudflare Pages, S3 + CDN, etc.).
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+### Required production configuration
 
-## Can I connect a custom domain to my Lovable project?
+- Configure all `VITE_SUPABASE_*` environment variables in hosting platform
+- Set Supabase Auth redirect URLs to production domain
+- Ensure DB migrations are applied before go-live
+- Keep RLS enabled for protected tables
+- Monitor edge functions and auth logs
 
-Yes, you can!
+## Database and Supabase Notes
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- Schema and policies are versioned in `supabase/migrations/`
+- Auth profile and role records are created via DB triggers
+- Additional sync migration ensures signup metadata is persisted to `profiles`
+- Storage bucket `papers` is used for paper assets
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Quality and Reliability
 
-## Supabase setup (required)
+- Type-safe DB integration via generated Supabase types
+- Route-level protection for authenticated/authorized views
+- Query caching and retries via React Query
+- Global error boundary and loading overlays for resilient UX
 
-This app needs Supabase environment variables.
+## Security Checklist
 
-1. Copy `.env.example` to `.env`.
-2. Fill values from Supabase Dashboard -> Project Settings -> API:
-- `VITE_SUPABASE_PROJECT_ID`
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_PUBLISHABLE_KEY` (anon public key)
+- Use HTTPS in production
+- Never expose service role keys in frontend
+- Restrict admin operations by role
+- Review RLS policies before each release
+- Rotate keys/secrets periodically
 
-Notes:
-- If `VITE_SUPABASE_URL` is omitted, the app can derive it from `VITE_SUPABASE_PROJECT_ID`.
-- Never commit `.env` to git.
+## Troubleshooting
+
+- "Supabase is not configured" banner:
+  - Check `.env` values and restart dev server
+- Verification link not logging in:
+  - Verify Supabase redirect URL configuration
+- Missing profile fields after signup:
+  - Confirm latest migrations are applied
+
+## License
+
+This project is proprietary unless you add an explicit open-source license.
+
+## Author
+
+Developed by **Harish Reddy Yarramada**.
