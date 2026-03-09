@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Search, Upload, Brain, BookOpen, Star, TrendingUp, Sparkles, ArrowRight, GraduationCap, Zap, Shield, Users, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import GlassCard from "@/components/GlassCard";
+import { useAuth } from "@/context/AuthContext";
 
 const features = [
   { icon: Search, title: "AI-Powered Search", desc: "Search papers using natural language. Find questions by topic, year, or concept.", color: "from-primary to-primary-glow" },
@@ -33,6 +35,23 @@ const item = {
 };
 
 const Index = () => {
+  const { user, loading } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loading || !user) return;
+
+    const hashParams = new URLSearchParams(location.hash.replace(/^#/, ""));
+    const fromVerificationLink =
+      hashParams.get("type") === "signup" ||
+      (hashParams.has("access_token") && hashParams.has("refresh_token"));
+
+    if (fromVerificationLink) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [loading, user, location.hash, navigate]);
+
   return (
     <Layout>
       {/* Hero */}
