@@ -1,0 +1,1 @@
+ALTER TYPE public.exam_type ADD VALUE IF NOT EXISTS 'Sem';
